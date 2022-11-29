@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title> Login Form</title>
+	<link rel="stylesheet" href="style3.css">
+    <script defer src="test.js"></script>
+</head>
+<body>
+    <div class="box">
+        <div class="form-box">
+            <div class="button-box">
+                <div id="btn"></div>
+                <button type="button" class="toggle-btn" onclick="login()">Log In</button>
+                <button type="button" class="toggle-btn" onclick="register()">Sign Up</button>
+            </div>
+            <div id="Login" class="inputBox">
+                    <input type="text" class="input-field" id="name2" placeholder="Username" required="required">
+                    <input type="password" class="input-field" id="pw" placeholder="Password" required="required">
+                <div class="links">
+                    <a href="#">Forgot Password ?</a>
+                </div>
+                <input type="submit" class="submit-btn" id="save2" value="Login">
+            </div>
+            <div id="Register" class="inputBox">
+                <input type="text" class="input-field" id="name" placeholder="Username" required="required">
+                <input type="number" class="input-field" id="phno" placeholder="Mobile Number" required="required">
+                <input type="password" class="input-field" id="npw" placeholder="New Password" required="required">
+                <input type="password" class="input-field" id="cpw" placeholder="Confirm Password" required="required">
+                
+                <input type="submit" class="submit-btn" id="save" value="Submit">
+        </div>
+            
+        </div>
+	</div>
+    <script>
+        var x= document.getElementById("Login");
+        var y= document.getElementById("Register");
+        var z= document.getElementById("btn");
+
+        function register(){
+            x.style.left= "-400px";
+            y.style.left= "50px";
+            z.style.left= "110px";
+        }
+        function login(){
+            x.style.left= "50px";
+            y.style.left= "450px";
+            z.style.left= "0px";
+        }
+    </script>
+    <script type="module">
+        // Import the functions you need from the SDKs you need 
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.11.0/firebase-app.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyDu36y5_keMweNTyanphL4TZ5Q1HmJuQhs",
+          authDomain: "fir-70f57.firebaseapp.com",
+          databaseURL: "https://fir-70f57-default-rtdb.asia-southeast1.firebasedatabase.app",
+          projectId: "fir-70f57",
+          storageBucket: "fir-70f57.appspot.com",
+          messagingSenderId: "160820084330",
+          appId: "1:160820084330:web:5239643677d1a0494b9413"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        import{getDatabase, set, get, update, remove,ref, child}
+        from "https://www.gstatic.com/firebasejs/9.11.0/firebase-database.js";
+
+        const db = getDatabase();
+        var name = document.querySelector("#name");
+        var name2 = document.querySelector("#name2");
+        var pw = document.querySelector("#pw");
+        var phno = document.querySelector("#phno");
+        var npw = document.querySelector("#npw");
+        var cpw = document.querySelector("#cpw");
+
+        var save= document.querySelector("#save");
+        var save2= document.querySelector("#save2");
+
+		function Validation(){
+            if(name.value==""){
+                alert("Enter Name");
+            }
+            else{
+			if(npw.value==cpw.value){
+				Insertdata();
+			}
+			else{
+				alert("Password did not matched");
+			}
+        }
+		}
+
+        function Insertdata(){
+			
+            set(ref(db,"Login/" + name.value),{
+                Name: name.value.trim(),
+                Phone_No: phno.value.trim(),
+                Password: npw.value.trim()
+            })
+		
+            .then(()=>{
+                name.value="";
+                phno.value="";
+                npw.value="";
+                cpw.value="";
+                alert("Data added succesfully")
+				
+            })
+            .catch((error)=>{
+                alert(error)
+            })
+        }
+       save.addEventListener('click',Validation);
+        function FindData(){
+    		const dbref = ref(db);
+
+    		get(child(dbref, "Login/" + name2.value))
+    		.then((snapshot)=>{
+        		if(snapshot.exists()){
+            		if (pw.value == snapshot.val().Password) {
+                        const Username= name2.value;
+                        const Phno= snapshot.val().Phone_No;
+
+                        localStorage.setItem("Username",Username);
+                        localStorage.setItem("Phone-number",Phno);
+
+                        window.location.href="Main.html";
+                        
+                    }
+                    else{
+                        alert("Wrong Password");
+                    }
+            		
+        		}
+        		else{
+            		alert("user did not matched");
+				}
+    		})
+    		.catch((error)=>{
+        		alert(error)
+   	 		})
+		}
+
+        save2.addEventListener('click',FindData);
+      </script>
+</body>

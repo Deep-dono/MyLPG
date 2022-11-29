@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style1.css">
+    <title>LPG Booking</title>
+</head>
+<body>
+    <header id="home">
+      <nav>
+        <h1>MyLPG</h1>
+        <ul>
+          <li><button class="btn btn-info float-right " onclick="func1()">Home</button></li>
+          <li><button class="btn btn-info float-right " id="save2">Delivery</button></li>
+          <li><button class="btn btn-info float-right " onclick="func()">Log Out</button></li>
+          <li><div class="user" ><p id="Username"></p></div></li>
+        </ul>
+      </nav>
+      <div class="welcome-event">
+        <h1 class="section-title">Book Your cylinder quickly</h1><br>
+      <div>
+          <div class="container" id="save">
+            <img src="agent/a.png" alt="sample89" />
+            <figcaption>
+              <h3>Book Now</h3>
+            </figcaption>
+            <a href="#"></a>
+          </div>
+          <div class="container">
+            <img src="agent/b.png" alt="sample94" />
+            <figcaption>
+              <h3>Apply Now</h3>
+            </figcaption>
+            <a href="New_Membership.html"></a>
+          </div>
+          <div class="container">
+            <img src="agent/c.png" alt="sample92" />
+            <figcaption>
+              <h3>Search Now</h3>
+            </figcaption>
+            <a href="Checkid.html"></a>
+          </div>
+      </div>
+      </div>
+    </header>
+    <main>
+      <section id="events">
+          <h1 class="section-title">Delivery Status</h1>
+          <div class="events-container">
+              <h1 id="showdetail" type="text"></h1>
+              <h1 id="showcard" type="text"></h1>
+          </div>
+      </section>
+  </main>
+    <footer>
+      <p>Author: Shubhadeep Saha<br>
+      <a href="mailto:shubhadeepsaha72@gmail.com">shubhadeepsaha72@gmail.com</a></p>
+    </footer>
+      <script>
+        const name1= localStorage.getItem('Username');
+        document.getElementById('Username').textContent= name1;
+        function func(){
+          localStorage.removeItem('Username');
+          localStorage.removeItem('Phone-number');
+          window.location.href="index.html";
+          return '';
+        };
+  function func1(){
+    window.location.reload();
+    window.location.href="#home";
+    
+  }
+      </script>
+</body>
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.11.0/firebase-app.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyDu36y5_keMweNTyanphL4TZ5Q1HmJuQhs",
+    authDomain: "fir-70f57.firebaseapp.com",
+    databaseURL: "https://fir-70f57-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "fir-70f57",
+    storageBucket: "fir-70f57.appspot.com",
+    messagingSenderId: "160820084330",
+    appId: "1:160820084330:web:5239643677d1a0494b9413"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  import{getDatabase, set, get, update, remove,ref, child, onValue}
+  from "https://www.gstatic.com/firebasejs/9.11.0/firebase-database.js";
+
+  const db = getDatabase();
+  var save = document.querySelector("#save");
+  var save2 = document.querySelector("#save2");
+  var phno = localStorage.getItem('Phone-number');
+  var showdetail=document.querySelector("#showdetail");
+  var showcard=document.querySelector("#showcard");
+  console.log(phno);
+const Statement=e=>{
+e.preventDefault();
+const starCountRe = ref(db, 'Booking/' + phno);
+onValue(starCountRe,(snap)=>{
+  if(snap.exists()){
+    alert("Cylinder already booked");
+  }
+  else{
+const starCountRef = ref(db, 'People/' + phno);
+onValue(starCountRef, (snapshot) => {
+  if(snapshot.exists()){
+    const data = snapshot.val().Status;
+    if(data=="1"){
+      alert("Your cylinder is booked, proceed to payment.");
+      window.location.href="payment.html";
+    }
+    else{
+      alert("Membership under review,can not book cylinder now");
+    }
+  }
+else{
+  alert("Please apply for new membership");
+}
+});
+}
+});
+}
+const func2=a=>{
+  a.preventDefault();
+  const starCountRef = ref(db, 'Booking/' + phno);
+onValue(starCountRef, (snapshot) => {
+  if(snapshot.exists()){
+    const data = snapshot.val().Status;
+    if(data=="1"){
+      showdetail.innerHTML="Your cylinder is out for delivery.";
+      showcard.innerHTML="";
+      window.location.href="#events";
+    }
+    else{
+      showdetail.innerHTML="Your cylinder is not yet been dispatched.";
+      showcard.innerHTML="";
+      window.location.href="#events";
+    }
+  }
+else{
+  showdetail.innerHTML="No booking found for delivery.";
+      showcard.innerHTML="";
+      window.location.href="#events";
+}
+});
+    
+  }
+save.addEventListener('click',Statement);
+save2.addEventListener('click',func2);
+</script>
+</html>

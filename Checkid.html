@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Check LPG ID</title>
+	<link rel="stylesheet" href="style6.css">
+</head>
+<body>
+	<nav>
+        <h1>MyLPG</h1>
+        <ul>
+            <li><a href="Indane.html">Home</a></li>
+        </ul>
+      </nav>
+	<div class="box">
+		<form id="form" autocomplete="off">
+			<h2>Search ID</h2>
+            <div class="inputBox">
+				<input type="text" id="phno" required="required">
+				<span>Mobile Number</span>
+				<i></i>
+			</div>
+			<input type="submit" id="save" value="Submit">
+			<br>
+			<span><h2 id="write" type="text"></h2></span>
+			<span><h2 id="id" type="text"></h2></span>
+		</form>
+	</div>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.11.0/firebase-app.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyDu36y5_keMweNTyanphL4TZ5Q1HmJuQhs",
+          authDomain: "fir-70f57.firebaseapp.com",
+          databaseURL: "https://fir-70f57-default-rtdb.asia-southeast1.firebasedatabase.app",
+          projectId: "fir-70f57",
+          storageBucket: "fir-70f57.appspot.com",
+          messagingSenderId: "160820084330",
+          appId: "1:160820084330:web:5239643677d1a0494b9413"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        import{getDatabase, set, get, update, remove,ref, child, onValue}
+        from "https://www.gstatic.com/firebasejs/9.11.0/firebase-database.js";
+
+        const db = getDatabase();
+       
+        var phno = document.querySelector("#phno");
+        var save= document.querySelector("#save");
+		var findid = document.querySelector("#id");
+		var find = document.querySelector("#write");
+
+		const FindData=e=>{
+			e.preventDefault();
+        const starCountRef = ref(db, 'People/' + phno.value);
+			onValue(starCountRef, (snapshot) => {
+				if(snapshot.exists()){
+					phno.value="";
+					const data = snapshot.val().id;
+			console.log(data);
+			find.innerHTML= "Your ID no is:";
+			findid.innerHTML= data;
+				}
+			else{
+				phno.value="";
+				find.innerHTML="Phone Number";
+				findid.innerHTML="did not matched";
+			}
+		});
+	}
+        save.addEventListener('click',FindData);
+      </script>
+</body>
+</html>

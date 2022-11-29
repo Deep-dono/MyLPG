@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style8.css">
+    <title>LPG Booking</title>
+</head>
+<body>
+   
+      <nav>
+        <h1>MyLPG</h1>
+        <ul>
+            <li><a href="Indane.html">Home</a></li>
+            <li><a href="#events">Status</a></li>
+            <li><a href="#add-event">New Membership</a></li>
+            <li><span id="Username"></span></li>
+        </ul>
+      </nav>
+      <h1 id="home"></h1>
+    <main>
+      
+        <section id="add-event">
+            <h1 class="section-title">Membership Form</h1>
+            <form id="form" class="form">
+                <input type="text" id="name" placeholder="Name" required="required">
+                <input type="number" id="attendee" placeholder="Mobile Number" required="required">
+                <textarea id="description" cols="30" rows="10" placeholder="Address" required="required"></textarea>
+                <h3>Select and Upload Valid ID(.jpg/.png)</h3>
+                <select id="status">
+                  <option value="PAN">PAN Card</option>
+                  <option value="Adhar">Adhar Card</option>
+                  <option value="Voter">Voter Card</option>
+                  <option value="Passport">Passport</option>
+                </select>
+                <input type="file" id="fileupload" accept="image/png, image/jpg" name="fileupload">
+                <button class="btn btn-primary" id="save">Save</button>
+            </form>
+        </section>
+        <section id="events">
+            <h1 class="section-title">Status</h1>
+            <div class="events-container">
+                <h1 id="showdetail" type="text"></h1>
+                <h1 id="showcard" type="text"></h1>
+            </div>
+        </section>
+    </main>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.11.0/firebase-app.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyDu36y5_keMweNTyanphL4TZ5Q1HmJuQhs",
+          authDomain: "fir-70f57.firebaseapp.com",
+          databaseURL: "https://fir-70f57-default-rtdb.asia-southeast1.firebasedatabase.app",
+          projectId: "fir-70f57",
+          storageBucket: "fir-70f57.appspot.com",
+          messagingSenderId: "160820084330",
+          appId: "1:160820084330:web:5239643677d1a0494b9413"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        import{getDatabase, set, get, update, remove,ref, child}
+        from "https://www.gstatic.com/firebasejs/9.11.0/firebase-database.js";
+        const db = getDatabase();
+        var name = document.querySelector("#name");
+        var attendee = document.querySelector("#attendee");
+        var description = document.querySelector("#description");
+        var values = document.querySelector("#status");
+        var file = document.querySelector("#fileupload");
+        var showdetail = document.querySelector("#showdetail");
+        var showcard = document.querySelector("#showcard");
+        var save= document.querySelector("#save");
+        var upload_image="";
+        file.addEventListener("change",function(){
+            const reader = new FileReader();
+            reader.addEventListener("load",() => {
+                upload_image=reader.result;
+            });
+            reader.readAsDataURL(this.files[0]);
+        })
+        const Insertdata=e=>{
+            if(attendee.value==""){
+                alert("Enter Phone Number");
+            }
+            else{
+            e.preventDefault();
+            set(ref(db,"People/" + attendee.value),{
+                Name: name.value,
+                Phone_No: attendee.value,
+                Address: description.value,
+                Value: values.value,
+                Agent: "Indane Gas",
+                Status: "0",
+                File: upload_image
+            })
+            .then(()=>{
+                
+                showdetail.innerHTML= "Dear " + name.value;
+                showcard.innerHTML= "Your Application is uploaded for review";
+                form.name.value = "";
+                form.attendee.value = "";
+                form.description.value = "";
+                form.status.value = "";
+                alert("Data added succesfully")
+                window.location.href="#events";
+            })
+            .catch((error)=>{
+                alert(error)
+                showcard.innerHTML = "Sorry seat full";
+            })
+        }
+        }
+        save.addEventListener('click',Insertdata);
+      </script>
+      <script>
+        const name1= localStorage.getItem('Username');
+        document.getElementById('Username').textContent= name1;
+      </script>
+</body>
+
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>LPG Booking</title>
+</head>
+<body>
+    <header id="home">
+      <nav>
+        <h1>MyLPG</h1>
+        <ul>
+          <li><button class="btn btn-info float-right " onclick="func1()">Home</button></li>
+            <li><button class="btn btn-info float-right " onclick="func2()">History</button></li>
+            <li><button class="btn btn-info float-right " onclick="func()">Log Out</button></li>
+            <li><div class="user" ><p id="Username"></p></div></li>
+        </ul>
+      </nav>
+      <script src="script.js"></script>
+      <div class="welcome-event">
+        <h1 class="section-title">Choose Agent</h1><br>
+      <div>
+        <div class="container">
+            <img src="images/a.png" alt="sample89" />
+            <figcaption>
+              <h3>Book Now</h3>
+            </figcaption>
+            <a href="Indane.html"></a>
+          </div>
+          <div class="container">
+            <img src="images/b.png" alt="sample94" />
+            <figcaption>
+              <h3>Book Now</h3>
+            </figcaption>
+            <a href="HP.html"></a>
+          </div>
+          <div class="container">
+            <img src="images/c.png" alt="sample92" />
+            <figcaption>
+              <h3>Book Now</h3>
+            </figcaption>
+            <a href="BP.html"></a>
+          </div>
+      </div>
+      </div>
+    </header>
+    <main>
+        <section id="events">
+            <h1 class="section-title">History</h1>
+            <div class="events-container">
+                <h1 id="showdetail" type="text"></h1>
+                <h1 id="showcard" type="text"></h1>
+            </div>
+        </section>
+    </main>
+    <footer>
+      <p>Author: Shubhadeep Saha<br>
+      <a href="mailto:shubhadeepsaha72@gmail.com">shubhadeepsaha72@gmail.com</a></p>
+    </footer>
+</body>
+<script>
+  const name1= localStorage.getItem('Username');
+  document.getElementById('Username').textContent= name1;
+  function func(){
+          localStorage.removeItem('Username');
+          localStorage.removeItem('Phone-number');
+          window.location.href="index.html";
+          return '';
+        };
+  function func1(){
+    window.location.href="#home";
+  }
+  function func2(){
+    window.location.href="#events";
+  }
+</script>
+</html>
